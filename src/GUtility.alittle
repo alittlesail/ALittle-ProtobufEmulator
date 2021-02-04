@@ -25,7 +25,6 @@ public static UitlityCreateChildMessage(RootInfo root, IDETree tree, lua.protobu
                 tree.AddChild(UtilityCreateTreeMessage(root, lua.protobuf.reflection_getmessage(rflct, msg, field_descriptor), field_name));
             else
                 tree.AddChild(new IDETreeValue(g_Control, root, field_name, rflct, msg, field_descriptor));
-        
         }
     }
 }

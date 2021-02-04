@@ -141,7 +141,7 @@ function ProtobufEmulator.GClient:HandleSettingChanged()
 	self._proto_search_item_pool = {}
 	self._proto_search_group = {}
 	self:RefreshProtoList()
-	self._detail_scroll_screen.container = nil
+	self._detail_scroll_screen:RemoveAllChild()
 	self._detail_tree_item_pool = {}
 	self._log_search_group = {}
 	self._log_item_list = {}
@@ -188,7 +188,7 @@ function ProtobufEmulator.GClient:RefreshProtoList()
 			item:AddEventListener(___all_struct[-641444818], self, self.HandleProtoItemRButtonDown)
 		end
 		local detail_info = self._detail_tree_item_pool[info.full_name]
-		item.selected = detail_info ~= nil and detail_info.tree == self._detail_scroll_screen.container
+		item.selected = detail_info ~= nil and detail_info.tree == self._detail_scroll_screen:GetChildByIndex(1)
 		item.group = self._proto_search_group
 		self._protobuf_scroll_screen:AddChild(item)
 	end
@@ -205,7 +205,8 @@ function ProtobufEmulator.GClient:HandleProtoItemSelected(event)
 		end
 		self._detail_tree_item_pool[info.full_name] = detail_info
 	end
-	self._detail_scroll_screen.container = detail_info.tree
+	self._detail_scroll_screen:RemoveAllChild()
+	self._detail_scroll_screen:AddChild(detail_info.tree)
 	self._detail_scroll_screen:AdjustScrollBar()
 end
 
@@ -366,7 +367,7 @@ function ProtobufEmulator.GClient:HandleClientSocketDisconnected(socket)
 end
 
 function ProtobufEmulator.GClient:HandleSendClick(event)
-	local tree = self._detail_scroll_screen.container
+	local tree = self._detail_scroll_screen:GetChildByIndex(1)
 	if tree == nil then
 		return
 	end
