@@ -33,12 +33,6 @@ function ProtobufEmulator.__Module_Setup(layer_group, control, module_base_path,
 	ProtobufEmulator.g_LayerGroup = layer_group
 	ProtobufEmulator.g_ModuleBasePath = module_base_path
 	ProtobufEmulator.g_AUIPluinControl = A_ModuleSystem:LoadPlugin("AUIPlugin")
-	if ALittle.System_GetPlatform() == "Windows" then
-		package.cpath = package.cpath .. ";./" .. module_base_path .. "Other/?.dll"
-		require("memory")
-		require("protobuf")
-		require("socket")
-	end
 	Require(script_base_path, "GCenter")
 	Require(script_base_path, "GClient")
 	Require(script_base_path, "GRobot")
