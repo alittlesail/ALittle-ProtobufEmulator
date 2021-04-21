@@ -492,6 +492,7 @@ function ProtobufEmulator.GBlueprint:HandleRobotStepSendMessageEditClick(event)
 	if root.detail_info == nil then
 		return
 	end
+	self._edit_scroll_screen:RemoveAllChild()
 	self._edit_scroll_screen.container = root.detail_info.tree
 	self._message_edit_dialog.visible = true
 	self._message_edit_dialog._user_data = link_info

@@ -112,6 +112,7 @@ protected class GClient : ALittle.DisplayLayout
         if (msg_info != null)
         {
             this._login_detail_info = Utility_CreateTreeForEdit(msg_info);
+            this._login_scroll_screen.RemoveAllChild();
             this._login_scroll_screen.container = this._login_detail_info.tree;
         }
 
@@ -166,6 +167,7 @@ protected class GClient : ALittle.DisplayLayout
         // 登录界面
         this._login_detail_info = null;
 
+        this._login_scroll_screen.RemoveAllChild();
         var msg_info = A_LuaProtobufSchedule.GetMessageInfo(g_GConfig.GetString("login_proto", ""));
         if (msg_info != null)
         {
@@ -173,7 +175,10 @@ protected class GClient : ALittle.DisplayLayout
             this._login_scroll_screen.container = this._login_detail_info.tree;
         }
         else
+        {
             this._login_scroll_screen.container = null;
+        }
+            
     }
 
     // 处理消息
@@ -193,13 +198,13 @@ protected class GClient : ALittle.DisplayLayout
         for (var index, child in this._protobuf_scroll_screen.childs)
             child.group = null;
         this._protobuf_scroll_screen.RemoveAllChild();
-
         // 搜索
         var list:List<Lua.lua_socket_schedule_message_info>;
         if (ALittle.List_Len(key_list) == 0)
             list = A_LuaProtobufSchedule.FindMessageByUpperKey("");
         else
             list = A_LuaProtobufSchedule.FindMessageByUpperKeyList(key_list);
+        
         for (var index, info in list)
         {
             var item = this._proto_search_item_pool[info.name];

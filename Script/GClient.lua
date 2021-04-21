@@ -110,6 +110,7 @@ function ProtobufEmulator.GClient:Setup()
 	local msg_info = A_LuaProtobufSchedule:GetMessageInfo(login_proto)
 	if msg_info ~= nil then
 		self._login_detail_info = ProtobufEmulator.Utility_CreateTreeForEdit(msg_info)
+		self._login_scroll_screen:RemoveAllChild()
 		self._login_scroll_screen.container = self._login_detail_info.tree
 	end
 	self._login_button.visible = true
@@ -149,6 +150,7 @@ function ProtobufEmulator.GClient:HandleSettingChanged()
 	self._log_scroll_screen:RemoveAllChild()
 	self:RefreshLogList()
 	self._login_detail_info = nil
+	self._login_scroll_screen:RemoveAllChild()
 	local msg_info = A_LuaProtobufSchedule:GetMessageInfo(ProtobufEmulator.g_GConfig:GetString("login_proto", ""))
 	if msg_info ~= nil then
 		self._login_detail_info = ProtobufEmulator.Utility_CreateTreeForEdit(msg_info)

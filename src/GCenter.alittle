@@ -209,8 +209,9 @@ class GCenter
         g_GConfig.SetConfig("plugin_script", this._plugin_file_input.text);
         g_GConfig.SetConfig("blueprint_root", this._blueprint_root_input.text);
 
-        this._gclient.HandleSettingChanged();
-        this._grobot.HandleSettingChanged();
+        g_AUITool.ShowNotice("提示", "新的设置已保存完毕，重启生效");
+        // this._gclient.HandleSettingChanged();
+        // this._grobot.HandleSettingChanged();
     }
 
     // 处理设置

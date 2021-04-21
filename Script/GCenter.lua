@@ -155,8 +155,7 @@ function ProtobufEmulator.GCenter:HandleSettingConfirmClick(event)
 	ProtobufEmulator.g_GConfig:SetConfig("login_proto", self._login_proto_input.text)
 	ProtobufEmulator.g_GConfig:SetConfig("plugin_script", self._plugin_file_input.text)
 	ProtobufEmulator.g_GConfig:SetConfig("blueprint_root", self._blueprint_root_input.text)
-	self._gclient:HandleSettingChanged()
-	self._grobot:HandleSettingChanged()
+	g_AUITool:ShowNotice("提示", "新的设置已保存完毕，重启生效")
 end
 
 function ProtobufEmulator.GCenter:HandleSettingCancelClick(event)
