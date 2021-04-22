@@ -126,17 +126,21 @@ protected class GRobot : ALittle.DisplayLayout
         }
         else
         {
+            // 记录登录成功
+            this.AddLog(id..":login succeed");
+
             var info = new PlayerInfo();
             this._player_map[id] = info;
             this._socket_map[client] = info;
             info.client = client;
             // 设置断开的回调函数
             info.client.disconnect_callback = bind(this.HandleClientSocketDisconnected, this, id);
-            info.robot = this._gblueprint.CreateRobotManager(id, info.client, total_count==1);
-            info.robot.Start();
             // 开始循环接收消息包
             info.client.ReceiveMessage();
-            this.AddLog(id..":login succeed");
+            // 创建机器人
+            info.robot = this._gblueprint.CreateRobotManager(id, info.client, total_count==1);
+            // 启动机器人
+            info.robot.Start();
         }
 
         this.HandleCreatePlayerEnd(total_count, id);

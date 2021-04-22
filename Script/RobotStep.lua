@@ -62,6 +62,9 @@ function ProtobufEmulator.RobotStepReceiveMessage:ReceiveMessage(msg)
 	if full_name ~= self._info.full_name then
 		return
 	end
+	if self._manager.trace then
+		g_GCenter._grobot:AddLog("收到消息:" .. self._info.full_name)
+	end
 	self._message = msg
 	local dst_json = protobuf.message_jsonencode(self._message, true, true)
 	local error, dst_info = Lua.TCall(ALittle.String_JsonDecode, dst_json)

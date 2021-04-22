@@ -129,15 +129,15 @@ function ProtobufEmulator.GRobot:CreatePlayer(ip, port, total_count, id, robot_l
 	if error ~= nil then
 		self:AddLog(id .. ":" .. error)
 	else
+		self:AddLog(id .. ":login succeed")
 		local info = {}
 		self._player_map[id] = info
 		self._socket_map[client] = info
 		info.client = client
 		info.client.disconnect_callback = Lua.Bind(self.HandleClientSocketDisconnected, self, id)
+		info.client:ReceiveMessage()
 		info.robot = self._gblueprint:CreateRobotManager(id, info.client, total_count == 1)
 		info.robot:Start()
-		info.client:ReceiveMessage()
-		self:AddLog(id .. ":login succeed")
 	end
 	self:HandleCreatePlayerEnd(total_count, id)
 end

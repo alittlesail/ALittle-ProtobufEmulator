@@ -53,6 +53,8 @@ protected class RobotStepReceiveMessage : RobotStep
         var full_name = lua.protobuf.messagedescriptor_fullname(descriptor);
         if (full_name != this._info.full_name) return;
 
+        if (this._manager.trace) g_GCenter._grobot.AddLog("收到消息:"..this._info.full_name);
+
         this._message = msg;
 
         // 拷贝消息
