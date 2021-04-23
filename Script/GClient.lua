@@ -290,6 +290,7 @@ function ProtobufEmulator.GClient:AddLogMessage(socket, msg)
 		self._log_scroll_screen:RemoveChild(item)
 		item.group = nil
 		ALittle.List_Remove(self._log_item_list, 1)
+		self._log_item_count = self._log_item_count - (1)
 	end
 	local user_data = {}
 	user_data.info = A_LuaProtobufSchedule:GetMessageInfoByMessage(msg)

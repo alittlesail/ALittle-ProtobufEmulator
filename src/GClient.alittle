@@ -343,6 +343,7 @@ protected class GClient : ALittle.DisplayLayout
             this._log_scroll_screen.RemoveChild(item);
             item.group = null;
             ALittle.List_Remove(this._log_item_list, 1);
+            this._log_item_count -= 1;
         }
 
         var user_data = new LogItemUserData();
