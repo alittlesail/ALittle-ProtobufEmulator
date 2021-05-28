@@ -4,6 +4,7 @@ if _G.ProtobufEmulator == nil then _G.ProtobufEmulator = {} end
 local ProtobufEmulator = ProtobufEmulator
 local Lua = Lua
 local ALittle = ALittle
+local ___rawset = rawset
 local ___pairs = pairs
 local ___ipairs = ipairs
 local ___all_struct = ALittle.GetAllStruct()
@@ -48,6 +49,12 @@ option_map = {}
 assert(ALittle.DisplayLayout, " extends class:ALittle.DisplayLayout is nil")
 ProtobufEmulator.GRobot = Lua.Class(ALittle.DisplayLayout, "ProtobufEmulator.GRobot")
 
+function ProtobufEmulator.GRobot:Ctor()
+	___rawset(self, "_cur_create_count", 0)
+	___rawset(self, "_cur_login_count", 0)
+	___rawset(self, "_cur_disconnected_count", 0)
+end
+
 function ProtobufEmulator.GRobot:Setup()
 	self._socket_map = {}
 	self._start_button.visible = true
@@ -83,6 +90,9 @@ function ProtobufEmulator.GRobot:ClearAllPlayer()
 		self._player_map = nil
 	end
 	self._cur_create_count = 0
+	self._cur_login_count = 0
+	self._cur_disconnected_count = 0
+	self._cur_status_text.text = ""
 	self._socket_map = {}
 end
 
@@ -118,6 +128,13 @@ function ProtobufEmulator.GRobot:HandleClientSocketDisconnected(player_id, socke
 	self:AddLog("disconnected:" .. player_id)
 	info.client = nil
 	self._player_map[player_id] = nil
+	self._cur_login_count = self._cur_login_count - (1)
+	self._cur_disconnected_count = self._cur_disconnected_count + (1)
+	self:UpdateStatusText()
+end
+
+function ProtobufEmulator.GRobot:UpdateStatusText()
+	self._cur_status_text.text = "已登录:" .. self._cur_login_count .. ", 已断开:" .. self._cur_disconnected_count
 end
 
 function ProtobufEmulator.GRobot:CreatePlayer(ip, port, total_count, id, robot_login, login_func)
@@ -128,8 +145,12 @@ function ProtobufEmulator.GRobot:CreatePlayer(ip, port, total_count, id, robot_l
 	end
 	if error ~= nil then
 		self:AddLog(id .. ":" .. error)
+		self._cur_disconnected_count = self._cur_disconnected_count + (1)
+		self:UpdateStatusText()
 	else
 		self:AddLog(id .. ":login succeed")
+		self._cur_login_count = self._cur_login_count + (1)
+		self:UpdateStatusText()
 		local info = {}
 		self._player_map[id] = info
 		self._socket_map[client] = info

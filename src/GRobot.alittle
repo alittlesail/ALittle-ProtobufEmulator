@@ -23,10 +23,13 @@ protected class GRobot : ALittle.DisplayLayout
 	private ALittle.TextButton _start_button;
 	private ALittle.TextInput _login_ip_input;
 	private ALittle.ScrollScreen _log_scroll_screen;
+    private ALittle.Text _cur_status_text;
 
     // 所有玩家对象
     private Map<int, PlayerInfo> _player_map;
-    private int _cur_create_count;
+    private int _cur_create_count = 0;
+    private int _cur_login_count = 0;
+    private int _cur_disconnected_count = 0;
     private Map<Lua.ISocket, PlayerInfo> _socket_map;
 
     public fun Setup()
@@ -68,6 +71,9 @@ protected class GRobot : ALittle.DisplayLayout
             this._player_map = null;
         }
         this._cur_create_count = 0;
+        this._cur_login_count = 0;
+        this._cur_disconnected_count = 0;
+        this._cur_status_text.text = "";
         this._socket_map = new Map<Lua.ISocket, PlayerInfo>();
     }
 
@@ -111,6 +117,15 @@ protected class GRobot : ALittle.DisplayLayout
         this.AddLog("disconnected:"..player_id);
         info.client = null;
         this._player_map[player_id] = null;
+
+        this._cur_login_count -= 1;
+        this._cur_disconnected_count += 1;
+        this.UpdateStatusText();
+    }
+
+    private fun UpdateStatusText()
+    {
+        this._cur_status_text.text = "已登录:"..this._cur_login_count..", 已断开:"..this._cur_disconnected_count;
     }
 
     private async fun CreatePlayer(string ip, int port, int total_count, int id
@@ -123,11 +138,17 @@ protected class GRobot : ALittle.DisplayLayout
         if (error != null)
         {
             this.AddLog(id..":"..error);
+
+            this._cur_disconnected_count += 1;
+            this.UpdateStatusText();
         }
         else
         {
             // 记录登录成功
             this.AddLog(id..":login succeed");
+
+            this._cur_login_count += 1;
+            this.UpdateStatusText();
 
             var info = new PlayerInfo();
             this._player_map[id] = info;
